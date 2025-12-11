@@ -1,3 +1,4 @@
+import { parseArguments } from "./parseArguments"
 interface Result {
   periodLength: number,
   trainingDays: number,
@@ -34,6 +35,16 @@ const exerciseCalculator = (days: number[], goal: number): Result => {
 
   console.log('what is success', success);
 
+  console.log({
+    'periodLength': periodLength,
+    'trainingDays': days.filter(day => day > 0).length,
+    'success': success,
+    'rating': `${ratingPercentage}%`,
+    'ratingDescription': ratingDescription,
+    'target': goal,
+    'average': avgTrained
+  });
+
   return {
     'periodLength': periodLength,
     'trainingDays': days.filter(day => day > 0).length,
@@ -47,6 +58,13 @@ const exerciseCalculator = (days: number[], goal: number): Result => {
 
 }
 
-
-
-console.log(exerciseCalculator([3, 0, 2, 4.5, 0, 3, 1],2));
+try {
+  const { value1, value3 } = parseArguments(process.argv)
+  exerciseCalculator(value3, value1)
+} catch (error: unknown) {
+  let errorMessage = 'Error: '
+  if (error instanceof Error) {
+    errorMessage += error.message
+  }
+  console.log(errorMessage);
+}
