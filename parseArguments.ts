@@ -37,5 +37,11 @@ export const parseArguments = (args: string[]): bmiValues => {
 
     else {
         throw new Error('Please only provide numbers')
-      }
+  }
+
+    return {
+    value1: 0,
+    value2: 0,
+    value3: []
+  };
 }
