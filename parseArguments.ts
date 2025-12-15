@@ -1,7 +1,7 @@
   interface bmiValues {
   value1: number,
-  value2?: number,
-  value3? : number[]
+  value2: number,
+  value3 : number[]
 }
 
 export const parseArguments = (args: string[]): bmiValues => {
@@ -11,7 +11,8 @@ export const parseArguments = (args: string[]): bmiValues => {
       if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
         return {
           value1: Number(args[2]),
-          value2: Number(args[3])
+          value2: Number(args[3]),
+          value3: [0]
         }
       }
   }
@@ -29,6 +30,7 @@ export const parseArguments = (args: string[]): bmiValues => {
     const value1 = Number(args[2])
     return {
       value1,
+      value2: 0,
       value3
     }
   }
