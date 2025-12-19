@@ -1,4 +1,4 @@
-import { parseArguments } from "./parseArguments"
+import { parseArguments } from "./parseArguments";
 interface Result {
   periodLength: number,
   trainingDays: number,
@@ -14,21 +14,21 @@ const exerciseCalculator = (days: number[], goal: number): Result => {
   // console.log('days are---', days);
   // console.log('goal is', goal);
   const totalHrsTrained = days.reduce((total, num) => total + num, 0);
-  const avgTrained = totalHrsTrained/ days.length
-  const periodLength = days.length
-  const success = avgTrained > goal
- const rating = (avgTrained/goal)*100
- const ratingPercentage = rating.toFixed(2)
+  const avgTrained = totalHrsTrained/ days.length;
+  const periodLength = days.length;
+  const success = avgTrained > goal;
+ const rating = (avgTrained/goal)*100;
+ const ratingPercentage = rating.toFixed(2);
 
-  let ratingDescription = 'Not your week'
+  let ratingDescription = 'Not your week';
   if (rating > 100) {
-    ratingDescription = 'excellent week'
+    ratingDescription = 'excellent week';
   }
   else if (rating > 90) {
-    ratingDescription = 'very close to an excellent week'
+    ratingDescription = 'very close to an excellent week';
   }
   else if (rating > 70) {
-    ratingDescription = 'work on consistency'
+    ratingDescription = 'work on consistency';
   }
 
   console.log('what is rating', rating);
@@ -53,18 +53,18 @@ const exerciseCalculator = (days: number[], goal: number): Result => {
     'ratingDescription': ratingDescription,
     'target': goal,
     'average': avgTrained
-  }
+  };
 
 
-}
+};
 
 try {
-  const { value1, value3 } = parseArguments(process.argv)
-  exerciseCalculator(value3, value1)
+  const { value1, value3 } = parseArguments(process.argv);
+  exerciseCalculator(value3, value1);
 } catch (error: unknown) {
-  let errorMessage = 'Error: '
+  let errorMessage = 'Error: ';
   if (error instanceof Error) {
-    errorMessage += error.message
+    errorMessage += error.message;
   }
   console.log(errorMessage);
 }

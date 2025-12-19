@@ -17,7 +17,7 @@ app.get('/bmi', (req, res) => {
   }
 
   console.log('type of height', typeof (height));
-  const bmi = calculateBmi(height, weight)
+  const bmi = calculateBmi(height, weight);
   console.log('bmi???', bmi);
 
   res.json({

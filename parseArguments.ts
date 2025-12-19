@@ -7,13 +7,13 @@
 export const parseArguments = (args: string[]): bmiValues => {
   if (args[1].includes('bmiCalculator.ts')){
     console.log('calculating bmi');
-      if (args.length > 4) throw new Error('Too many args for bmi Calc')
+      if (args.length > 4) throw new Error('Too many args for bmi Calc');
       if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
         return {
           value1: Number(args[2]),
           value2: Number(args[3]),
           value3: [0]
-        }
+        };
       }
   }
   else if (args[1].includes('exerciseCalculator.ts')) {
@@ -25,18 +25,18 @@ export const parseArguments = (args: string[]): bmiValues => {
       if (isNaN(num)) {
         throw new Error(`Argument ${args[i]} is not a valid number.`);
       }
-      value3.push(num)
+      value3.push(num);
     }
-    const value1 = Number(args[2])
+    const value1 = Number(args[2]);
     return {
       value1,
       value2: 0,
       value3
-    }
+    };
   }
 
     else {
-        throw new Error('Please only provide numbers')
+        throw new Error('Please only provide numbers');
   }
 
     return {
@@ -44,4 +44,4 @@ export const parseArguments = (args: string[]): bmiValues => {
     value2: 0,
     value3: []
   };
-}
+};
