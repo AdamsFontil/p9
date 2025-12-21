@@ -14,8 +14,11 @@ export const calculateBmi = (height: number, weight: number) => {
 };
 
 try {
-  const { value1, value2 } = parseArguments(process.argv);
-  calculateBmi(value1, value2);
+  if (require.main === module) {
+    console.log('running in node');
+    const { value1, value2 } = parseArguments(process.argv);
+    calculateBmi(value1, value2);
+  }
 } catch (error: unknown) {
   let errorMessage = 'Something went wrong';
   if (error instanceof Error) {

@@ -9,7 +9,7 @@ interface Result {
   average: number
 }
 
-const exerciseCalculator = (days: number[], goal: number): Result => {
+export const exerciseCalculator = (days: number[], goal: number): Result => {
 
   // console.log('days are---', days);
   // console.log('goal is', goal);
@@ -31,19 +31,19 @@ const exerciseCalculator = (days: number[], goal: number): Result => {
     ratingDescription = 'work on consistency';
   }
 
-  console.log('what is rating', rating);
+  // console.log('what is rating', rating);
 
-  console.log('what is success', success);
+  // console.log('what is success', success);
 
-  console.log({
-    'periodLength': periodLength,
-    'trainingDays': days.filter(day => day > 0).length,
-    'success': success,
-    'rating': `${ratingPercentage}%`,
-    'ratingDescription': ratingDescription,
-    'target': goal,
-    'average': avgTrained
-  });
+  // console.log({
+  //   'periodLength': periodLength,
+  //   'trainingDays': days.filter(day => day > 0).length,
+  //   'success': success,
+  //   'rating': `${ratingPercentage}%`,
+  //   'ratingDescription': ratingDescription,
+  //   'target': goal,
+  //   'average': avgTrained
+  // });
 
   return {
     'periodLength': periodLength,
@@ -59,8 +59,10 @@ const exerciseCalculator = (days: number[], goal: number): Result => {
 };
 
 try {
+  if (require.main === module) {
   const { value1, value3 } = parseArguments(process.argv);
   exerciseCalculator(value3, value1);
+  }
 } catch (error: unknown) {
   let errorMessage = 'Error: ';
   if (error instanceof Error) {
