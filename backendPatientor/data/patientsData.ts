@@ -1,6 +1,7 @@
 import { PatientType } from "../src/types";
+import toNewPatientEntry from "../src/utils";
 
-const PatientsData: PatientType[] = [
+const data = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
@@ -42,5 +43,11 @@ const PatientsData: PatientType[] = [
         "occupation": "Digital evangelist"
     }
 ];
+
+const PatientsData: PatientType[] = data.map(obj => {
+    const object = toNewPatientEntry(obj) as PatientType;
+    object.id = obj.id;
+    return object;
+});
 
 export default PatientsData;
