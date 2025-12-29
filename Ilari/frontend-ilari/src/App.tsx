@@ -25,6 +25,7 @@ const App = () => {
           <div>
             <p>visibility: {entry.visibility}</p>
             <p>weather: {entry.weather}</p>
+            <p><em>{entry.comment}</em></p>
           </div>
         </div>
       ))}
