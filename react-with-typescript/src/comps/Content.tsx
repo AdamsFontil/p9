@@ -1,21 +1,19 @@
-interface CoursePart {
-  name: string;
-  exerciseCount: number;
-}
-
+import type { CoursePart } from "../types";
+import Part from "./Part";
 interface CourseParts {
   courseParts: CoursePart[]
 }
 
 
-const Content = (props: CourseParts) => {
-  console.log(typeof(props));
-  console.log('part', props.courseParts[0]);
+const Content = ({courseParts}: CourseParts) => {
+  console.log(typeof(courseParts));
+  console.log('courseParts---from content comp', courseParts[0]);
+
   return (
     <div>
-      {props.courseParts.map((part, index) => (
+      {courseParts.map((part, index) => (
         <div key={index}>
-          <p> {part.name} {part.exerciseCount}</p>
+          <Part part={part} />
         </div>
       ))}
     </div>
