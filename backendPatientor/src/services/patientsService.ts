@@ -1,8 +1,8 @@
 import PatientsData from '../../data/patientsData';
-import { NonsensitivePatientType, NewPatientType, PatientType } from '../types';
+import { NonSensitivePatient, NewPatientType, Patient } from '../types';
 import { v1 as uuid } from 'uuid';
 
-const getNonsensitivePatients = (): NonsensitivePatientType[] => {
+const getNonsensitivePatients = (): NonSensitivePatient[] => {
   return PatientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -12,8 +12,17 @@ const getNonsensitivePatients = (): NonsensitivePatientType[] => {
   }));
 };
 
+const getOnePatient = (id: string): Patient | undefined => {
+  const match = PatientsData.find((patient) => patient.id === id);
+  console.log('match--', match);
+  if (match) {
+    return match;
+  } else {
+    throw new Error('no match found');
+  }
+};
 
-const addPatient = (entry: NewPatientType): PatientType  => {
+const addPatient = (entry: NewPatientType): Patient  => {
   console.log('entry is---',entry);
   const NewPatientEntry = {
     id: uuid(),
@@ -26,5 +35,5 @@ const addPatient = (entry: NewPatientType): PatientType  => {
 
 export default {
   getNonsensitivePatients,
-  addPatient
+  addPatient, getOnePatient
 };
