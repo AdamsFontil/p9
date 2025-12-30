@@ -44,12 +44,6 @@ const App = () => {
         }
       }
 }
-
-
-
-
-
-
     console.log('creating new note---', diaryToAdd);
     setDate('')
     setWeather('')
@@ -70,13 +64,135 @@ const App = () => {
       ))}
 
 
-      <form onSubmit={diaryCreation}>
-        <p>date: <input value={date} onChange={(event) => setDate(event.target.value)} /></p>
-        <p>visibility: <input value={visibility} onChange={(event) => setVisibility(event.target.value)} /></p>
-        <p>weather: <input value={weather} onChange={(event) => setWeather(event.target.value)} /></p>
-        <p>comment: <input value={comment} onChange={(event) => setComment(event.target.value)} /></p>
-        <button type='submit'>new entry</button>
-      </form>
+  <form onSubmit={diaryCreation}>
+  <label htmlFor="date">Date:</label>
+  <input type="date" id="date" value={date} onChange={(event) => setDate(event.target.value)} />
+
+  <fieldset>
+          <legend>Visibility:</legend>
+              <div>
+      <input
+        type="radio"
+        name="visibility"
+        id="visibility-great"
+        value="great"
+        checked={visibility === "great"}
+        onChange={(event) => setVisibility(event.target.value)}
+      />
+      <label htmlFor="visibility-good">Great</label>
+    </div>
+    <div>
+      <input
+        type="radio"
+        name="visibility"
+        id="visibility-good"
+        value="good"
+        checked={visibility === "good"}
+        onChange={(event) => setVisibility(event.target.value)}
+      />
+      <label htmlFor="visibility-good">Good</label>
+    </div>
+
+    <div>
+      <input
+        type="radio"
+        name="visibility"
+        id="visibility-ok"
+        value="ok"
+        checked={visibility === "ok"}
+        onChange={(event) => setVisibility(event.target.value)}
+      />
+      <label htmlFor="visibility-ok">Ok</label>
+    </div>
+
+    <div>
+      <input
+        type="radio"
+        name="visibility"
+        id="visibility-poor"
+        value="poor"
+        checked={visibility === "poor"}
+        onChange={(event) => setVisibility(event.target.value)}
+      />
+      <label htmlFor="visibility-poor">Poor</label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Weather:</legend>
+    <div>
+      <input
+        type="radio"
+        name="weather"
+        id="weather-sunny"
+        value="sunny"
+        checked={weather === "sunny"}
+        onChange={(event) => setWeather(event.target.value)}
+      />
+      <label htmlFor="weather-sunny">Sunny</label>
+    </div>
+
+    <div>
+      <input
+        type="radio"
+        name="weather"
+        id="weather-rainy"
+        value="rainy"
+        checked={weather === "rainy"}
+        onChange={(event) => setWeather(event.target.value)}
+      />
+      <label htmlFor="weather-rainy">Rainy</label>
+    </div>
+
+    <div>
+      <input
+        type="radio"
+        name="weather"
+        id="weather-cloudy"
+        value="cloudy"
+        checked={weather === "cloudy"}
+        onChange={(event) => setWeather(event.target.value)}
+      />
+      <label htmlFor="weather-cloudy">Cloudy</label>
+          </div>
+
+              <div>
+      <input
+        type="radio"
+        name="weather"
+        id="weather-stormy"
+        value="stormy"
+        checked={weather === "stormy"}
+        onChange={(event) => setWeather(event.target.value)}
+      />
+      <label htmlFor="weather-cloudy">Stormy</label>
+          </div>
+
+
+              <div>
+      <input
+        type="radio"
+        name="weather"
+        id="weather-windy"
+        value="windy"
+        checked={weather === "windy"}
+        onChange={(event) => setWeather(event.target.value)}
+      />
+      <label htmlFor="weather-cloudy">Windy</label>
+    </div>
+  </fieldset>
+
+  <label htmlFor="comment">Comment:</label>
+  <input
+    type="text"
+    id="comment"
+    value={comment}
+    onChange={(event) => setComment(event.target.value)}
+  />
+
+  <button type="submit">New Entry</button>
+</form>
+
 
       <h3>Diary Entries</h3>
       {diaries.map((entry, index) => (
