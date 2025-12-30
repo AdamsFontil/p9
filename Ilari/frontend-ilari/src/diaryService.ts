@@ -15,4 +15,4 @@ export const createDiary = (object: NewDiaryEntry) => {
   return axios
     .post<DiaryEntry>(baseUrl, object)
     .then(response => response.data)
-}
+};

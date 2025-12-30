@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import type { DiaryEntry } from './types'
+import type { DiaryEntry, Weather, Visibility } from './types'
 import { createDiary, getAllDiaries } from './diaryService'
+import axios from 'axios'
 
 
 const App = () => {
+  const [message, setMessage] = useState < string[]>([])
   const [diaries, setDiaries] = useState<DiaryEntry[]>([])
   const [date, setDate] = useState('')
   const [visibility, setVisibility] = useState('')
@@ -18,17 +20,32 @@ const App = () => {
   }, [])
 
 
-  const diaryCreation = (event: React.SyntheticEvent) => {
+  const diaryCreation = async (event: React.SyntheticEvent) => {
     event.preventDefault()
     const diaryToAdd = {
       date,
-      weather: weather as 'sunny' | 'rainy' | 'cloudy' | 'stormy' | 'windy',
-      visibility: visibility as 'great' | 'good' | 'ok' | 'poor',
+      weather: weather as Weather,
+      visibility: visibility as Visibility,
       comment
     }
-    createDiary(diaryToAdd).then(data => {
-      setDiaries(diaries.concat(data))
-    })
+    try {
+      await createDiary(diaryToAdd);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errors = error.response?.data.error;
+        console.log('what is errors', errors);
+        if (Array.isArray(errors)) {
+          setMessage(errors.map(e => {
+            return `Error: ${e.message}`
+          }));
+          setTimeout(() => {
+            setMessage([])
+          }, 5000);
+        }
+      }
+}
+
+
 
 
 
@@ -46,6 +63,13 @@ const App = () => {
   console.log('what are diaries---', diaries);
   return (
     <div>
+      {message.map((msg, index) => (
+        <div style={{
+    color: 'red',
+  }} key={index}>{msg}</div>
+      ))}
+
+
       <form onSubmit={diaryCreation}>
         <p>date: <input value={date} onChange={(event) => setDate(event.target.value)} /></p>
         <p>visibility: <input value={visibility} onChange={(event) => setVisibility(event.target.value)} /></p>

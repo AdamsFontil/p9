@@ -2,10 +2,6 @@ import type { NewDiaryEntry } from "./types";
 import { Weather, Visibility } from "./types";
 import z from "zod";
 
-
-export const enumFrom = <T extends string>(obj: Record<string, T>) =>
-  z.enum(Object.keys(obj) as [T, ...T[]]);
-
 export const NewEntrySchema = z.object({
   weather: z.enum(Weather),
   visibility: z.enum(Visibility),
