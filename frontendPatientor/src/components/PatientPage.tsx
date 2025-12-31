@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import { Patient } from "../types";
+import { Entry, Patient } from "../types";
 import { useEffect } from "react";
 import patientService from "../services/patientService";
 import { Female, Male, Transgender } from "@mui/icons-material";
@@ -28,6 +28,7 @@ const PatientPage = () => {
 }
 
   console.log('what is id', id);
+  console.log('patient entries', patient.entries);
   return (
     <div>
       <h3>{patient.name}
@@ -38,6 +39,24 @@ const PatientPage = () => {
       <div>
         <p>snn: {patient.ssn}</p>
         <p>occupation: {patient.occupation}</p>
+      </div>
+      <div>
+        <h4>Entries</h4>
+      {patient.entries.map((entry: Entry) => (
+        <div key={entry.id}>
+          <p>{entry.date}</p>
+          <p>{entry.description}</p>
+          <p>{entry.diagnosisCodes?.map((code) => (
+            <ul>
+              <li>{code}</li>
+            </ul>
+          ))}</p>
+        </div>
+))}
+
+
+
+
       </div>
     </div>
   );
