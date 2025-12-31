@@ -1,13 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import { Entry, Patient } from "../types";
+import { Diagnosis, Entry, Patient } from "../types";
 import { useEffect } from "react";
 import patientService from "../services/patientService";
 import { Female, Male, Transgender } from "@mui/icons-material";
+import diagnosisService from "../services/diagnosisService";
 
 const PatientPage = () => {
     const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -18,6 +20,16 @@ const PatientPage = () => {
     fetchPatient();
   }, [id]);
 
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const retrievedDiagnoses = await diagnosisService.getDiagnoses();
+      console.log('retrieved codes---', retrievedDiagnoses);
+      setDiagnoses(retrievedDiagnoses);
+    };
+    console.log('run for diagnoses');
+    fetchDiagnoses();
+  }, []);
+
 
   if (!patient) {
     return (
@@ -27,8 +39,21 @@ const PatientPage = () => {
     );
 }
 
-  console.log('what is id', id);
-  console.log('patient entries', patient.entries);
+  console.log('what are diagnoses---', diagnoses);
+
+  const defineCode = (code: string) => {
+    console.log('code received--', code);
+    const match = diagnoses?.find(diagnosis => {
+      return diagnosis.code === code;
+    });
+    console.log('match found???', match);
+    if (match) {
+      return match.name;
+    } else {
+      return 'code not found';
+    }
+  };
+
   return (
     <div>
       <h3>{patient.name}
@@ -46,16 +71,13 @@ const PatientPage = () => {
         <div key={entry.id}>
           <p>{entry.date}</p>
           <p>{entry.description}</p>
-          <p>{entry.diagnosisCodes?.map((code) => (
-            <ul>
-              <li>{code}</li>
+          <div>{entry.diagnosisCodes?.map((code, index) => (
+            <ul key={index}>
+              <li>{code}: {defineCode(code)}</li>
             </ul>
-          ))}</p>
+          ))}</div>
         </div>
 ))}
-
-
-
 
       </div>
     </div>
