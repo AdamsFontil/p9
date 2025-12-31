@@ -20,8 +20,11 @@ const create = async (object: PatientFormValues) => {
   return data;
 };
 
-const getPatient = async (id: string) => {
-  const { data } = await axios.get<Patient[]>(
+const getPatient = async (id: string | undefined) => {
+  if (!id) {
+    throw new Error('ID not provided');
+  }
+  const { data } = await axios.get<Patient>(
     `${apiBaseUrl}/patients/${id}`
   );
   console.log('what is data---', data);
