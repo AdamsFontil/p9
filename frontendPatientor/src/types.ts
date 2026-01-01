@@ -68,9 +68,11 @@ export interface HospitalEntry extends BaseEntry {
   }
 }
 
+type BetterOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
-export type Test = Omit<Entry, 'id'>;
+export type NewEntryFormValues = BetterOmit<Entry, 'id'>;

@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import diagnosisService from "../../services/diagnosisService";
-import { Diagnosis, Entry, Patient } from "../../types";
+import { Diagnosis, Entry, NewEntryFormValues, Patient } from "../../types";
 import HospitalEntryComponent from "./HospitalEntryComponent";
 import OccupationalHealthcareEntryComponent from "./OccupationalHealthcareComp";
 import HealthCheckEntryComponent from "./HealthCheckComp";
+import patientService from "../../services/patientService";
+import { Button } from "@mui/material";
+import EntryForm from "./PatientModal/EntryForm";
 
 type EntryProps = {
   patient: Patient
@@ -11,6 +14,9 @@ type EntryProps = {
 
 const Entries = ({ patient}: EntryProps) => {
   const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
+  const [entries, setEntries] = useState(patient.entries);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  console.log('modal stat--', modalOpen);
 
     useEffect(() => {
     const fetchDiagnoses = async () => {
@@ -39,11 +45,33 @@ const Entries = ({ patient}: EntryProps) => {
   throw new Error(
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
-};
+  };
+
+    const openModal = (): void => {
+    setModalOpen(true);
+    console.log('OPENING MODAL');
+  };
+
+  const closeModal = (): void => {
+    console.log('CLOSING MOAL');
+    setModalOpen(false);
+  };
+
+    const submitNewEntry = async (values: NewEntryFormValues) => {
+
+      const entry = await patientService.createEntry(patient.id, values);
+      setEntries(entries.concat(entry));
+      console.log('entry---', entry);
+      closeModal();
+
+
+  };
   return (
     <div>
       <h4>Entries</h4>
-      {patient.entries.map((entry: Entry) => {
+      {modalOpen === false && <Button variant="contained" onClick={openModal}>Add New Entry</Button> }
+      {modalOpen === true && <EntryForm onCancel={closeModal} onSubmit={submitNewEntry} />}
+      {entries.map((entry: Entry) => {
         switch (entry.type) {
           case "Hospital":
             return <HospitalEntryComponent key={entry.id} entry={entry} defineCode={defineCode} />;
@@ -55,7 +83,6 @@ const Entries = ({ patient}: EntryProps) => {
             return assertNever(entry);
         }
       }
-
       )}
 
     </div>
