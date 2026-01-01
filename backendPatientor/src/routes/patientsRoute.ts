@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 const router = express.Router();
-import { NewPatientType, NonSensitivePatient, Patient } from '../types';
+import { NewPatientType, NonSensitivePatient, Patient, Entry, NewEntry } from '../types';
 import patientsService from '../services/patientsService';
-import { newPatientParser, errorMiddleware } from '../middleware';
+import { newPatientParser, errorMiddleware, newEntryParser } from '../middleware';
 
 router.get('/', (_req, res: Response<NonSensitivePatient[]>) => {
   console.log('getting patients');
@@ -21,6 +21,21 @@ router.get('/:id', (req: Request, res: Response<Patient>) => {
   console.log('id received--', id);
   res.send(patientsService.getOnePatient(id));
 });
+
+
+router.post(
+  '/:id/entries', newEntryParser,
+  (req: Request<{ id: string }, unknown, NewEntry>, res: Response<Entry>) => {
+    const { id } = req.params;
+    const entry = req.body;
+    const addedEntry = patientsService.addEntry(id, entry);
+    console.log('what is addedEntry--', addedEntry);
+    res.json(addedEntry);
+  }
+);
+
+
+
 
 
 
