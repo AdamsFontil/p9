@@ -5,8 +5,9 @@ import HospitalEntryComponent from "./HospitalEntryComponent";
 import OccupationalHealthcareEntryComponent from "./OccupationalHealthcareComp";
 import HealthCheckEntryComponent from "./HealthCheckComp";
 import patientService from "../../services/patientService";
-import { Button } from "@mui/material";
+import { Button, Alert } from "@mui/material";
 import EntryForm from "./PatientModal/EntryForm";
+import axios from "axios";
 
 type EntryProps = {
   patient: Patient
@@ -16,7 +17,7 @@ const Entries = ({ patient}: EntryProps) => {
   const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
   const [entries, setEntries] = useState(patient.entries);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  console.log('modal stat--', modalOpen);
+  const [error, setError] = useState('');
 
     useEffect(() => {
     const fetchDiagnoses = async () => {
@@ -57,18 +58,40 @@ const Entries = ({ patient}: EntryProps) => {
     setModalOpen(false);
   };
 
-    const submitNewEntry = async (values: NewEntryFormValues) => {
+  const submitNewEntry = async (values: NewEntryFormValues) => {
 
+    try {
       const entry = await patientService.createEntry(patient.id, values);
       setEntries(entries.concat(entry));
       console.log('entry---', entry);
       closeModal();
-
-
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace('Something went wrong. Error: ', '');
+          console.error(message);
+          setError(message);
+        } else {
+          setError(`Unrecognized axios error: ${e.response?.data.error[0].message}`);
+          console.log('unrecognized--', e.response?.data.error);
+          console.log('unrecognized error----', e.response?.data.error[0].message);
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+        console.log('unknown error---', e);
+      }
+    }
   };
+
+
+
+
+
   return (
     <div>
       <h4>Entries</h4>
+      <div style={{padding: '12px'}}>{error && <Alert severity="error">{error}</Alert>}</div>
       {modalOpen === false && <Button variant="contained" onClick={openModal}>Add New Entry</Button> }
       {modalOpen === true && <EntryForm onCancel={closeModal} onSubmit={submitNewEntry} />}
       {entries.map((entry: Entry) => {
