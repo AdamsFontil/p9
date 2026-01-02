@@ -25,6 +25,12 @@ const HospitalEntryComponent = ({ entry, defineCode}: HospitalEntryType) => {
           <li>{code}: {defineCode(code)}</li>
         </ul>
       ))}</div>
+      <div>
+        <p>Discharged: {entry.discharge.date}</p>
+        <p>Criteria: {entry.discharge.criteria}</p>
+      </div>
+
+
     </Card>
   );
 };

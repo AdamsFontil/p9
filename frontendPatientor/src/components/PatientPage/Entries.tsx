@@ -6,7 +6,7 @@ import OccupationalHealthcareEntryComponent from "./OccupationalHealthcareComp";
 import HealthCheckEntryComponent from "./HealthCheckComp";
 import patientService from "../../services/patientService";
 import { Button, Alert } from "@mui/material";
-import EntryForm from "./PatientModal/EntryForm";
+import EntryForm from "./Forms/EntryForm";
 import axios from "axios";
 
 type EntryProps = {
@@ -59,6 +59,7 @@ const Entries = ({ patient}: EntryProps) => {
   };
 
   const submitNewEntry = async (values: NewEntryFormValues) => {
+    console.log('values received--', values);
 
     try {
       const entry = await patientService.createEntry(patient.id, values);
