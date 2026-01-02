@@ -20,11 +20,12 @@ const HospitalEntryComponent = ({ entry, defineCode}: HospitalEntryType) => {
         }} key={entry.id}>
       <p>{entry.date} <MasksIcon /></p>
       <p>{entry.description}</p>
-      <div>{entry.diagnosisCodes?.map((code, index) => (
+      <div> <h3>Diagnosis Code: </h3>
+        {entry.diagnosisCodes?.map((code, index) => (
         <ul key={index}>
           <li>{code}: {defineCode(code)}</li>
         </ul>
-      ))}</div>
+        ))}</div>
       <div>
         <p>Discharged: {entry.discharge.date}</p>
         <p>Criteria: {entry.discharge.criteria}</p>

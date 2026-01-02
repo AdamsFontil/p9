@@ -1,11 +1,15 @@
 import { SyntheticEvent, useState } from "react";
+import { SelectChangeEvent } from "@mui/material/Select";
 import {
   TextField,
   MenuItem,
   Select,
-  InputLabel
+  InputLabel,
+  Checkbox,
+  ListItemText
 } from "@mui/material";
 import {
+  Diagnosis,
   HealthCheckRating,
   NewEntryFormValues
 } from "../../../types";
@@ -13,19 +17,20 @@ import {
 type EntryProps = {
   onCancel: () => void;
   onSubmit: (values: NewEntryFormValues) => void;
+  codes: Diagnosis[] | null;
 };
 
 const entryTypes = ["HealthCheck", "Hospital", "OccupationalHealthcare"] as const;
 type EntryType = typeof entryTypes[number];
 
-const EntryForm = ({ onCancel, onSubmit }: EntryProps) => {
+const EntryForm = ({ onCancel, onSubmit, codes }: EntryProps) => {
   const [type, setType] = useState<EntryType>("HealthCheck");
 
   // shared fields
   const [description, setDescription] = useState("testing");
   const [date, setDate] = useState("2015-01-01");
   const [specialist, setSpecialist] = useState("set specialist");
-  const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>(['not valid']);
+  const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
 
   // HealthCheck
   const [healthCheckRating, setHealthCheckRating] =
@@ -39,6 +44,18 @@ const EntryForm = ({ onCancel, onSubmit }: EntryProps) => {
 
   // OccupationalHealthcare
   const [employerName, setEmployerName] = useState("fbi");
+
+  console.log('D-CODES----', codes);
+
+    const handleChangeForCodes = (event: SelectChangeEvent<typeof diagnosisCodes>) => {
+    const {
+      target: { value },
+    } = event;
+    setDiagnosisCodes(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
   const submit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -110,6 +127,7 @@ const EntryForm = ({ onCancel, onSubmit }: EntryProps) => {
         fullWidth
         margin="normal"
         value={date}
+        type="date"
         onChange={(e) => setDate(e.target.value)}
       />
 
@@ -121,17 +139,25 @@ const EntryForm = ({ onCancel, onSubmit }: EntryProps) => {
         onChange={(e) => setSpecialist(e.target.value)}
       />
 
-      <TextField
-        label="Diagnosis codes (comma separated)"
-        fullWidth
-        margin="normal"
-        value={diagnosisCodes.join(", ")}
-        onChange={(e) =>
-          setDiagnosisCodes(
-            e.target.value.split(",").map(c => c.trim())
-          )
-        }
-      />
+      <Select
+          label="Diagnosis codes (comma separated)"
+          fullWidth
+          // margin="normal"
+          multiple
+          value={diagnosisCodes}
+          onChange={handleChangeForCodes}
+          // input={<OutlinedInput label="Tag" />}
+          renderValue={(selected) => selected.join(', ')}
+          // MenuProps={MenuProps}
+        >
+          {codes?.map((diagnosis) => (
+            <MenuItem key={diagnosis.code} value={diagnosis.code}>
+              <Checkbox checked={diagnosisCodes.includes(diagnosis.code)} />
+              <ListItemText  primary={`${diagnosis.code} — ${diagnosis.name}`} />
+
+            </MenuItem>
+          ))}
+      </Select>
 
       {/* TYPE-SPECIFIC FIELDS */}
       {type === "HealthCheck" && (
@@ -156,6 +182,7 @@ const EntryForm = ({ onCancel, onSubmit }: EntryProps) => {
             label="Discharge date"
             fullWidth
             margin="normal"
+            type="date"
             value={discharge.date}
             onChange={(e) =>
               setDischarge({ ...discharge, date: e.target.value })

@@ -94,7 +94,7 @@ const Entries = ({ patient}: EntryProps) => {
       <h4>Entries</h4>
       <div style={{padding: '12px'}}>{error && <Alert severity="error">{error}</Alert>}</div>
       {modalOpen === false && <Button variant="contained" onClick={openModal}>Add New Entry</Button> }
-      {modalOpen === true && <EntryForm onCancel={closeModal} onSubmit={submitNewEntry} />}
+      {modalOpen === true && <EntryForm codes={diagnoses} onCancel={closeModal} onSubmit={submitNewEntry} />}
       {entries.map((entry: Entry) => {
         switch (entry.type) {
           case "Hospital":
